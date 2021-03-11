@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+uniform bool selected = true;
+uniform float blink_speed = 2.5;
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV);
+	if(selected){
+		vec4 mixvalue = vec4(1.0-UV.y + abs(sin(TIME*blink_speed)))*COLOR.a;
+		COLOR = mix(COLOR, mixvalue, 0.3);
+	}
+}
+
+void vertex(){
+	if(selected)
+		VERTEX += vec2(cos(TIME*14.0)*10.0, sin(TIME)*10.0);
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/selected = true
+shader_param/blink_speed = 2.5

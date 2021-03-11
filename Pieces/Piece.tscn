@@ -1,10 +1,55 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Pieces/Piece.gd" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Pieces/rupee.png" type="Texture" id=2]
+[ext_resource path="res://Pieces/Selected.tres" type="Material" id=3]
+[ext_resource path="res://Pieces/rupee-sheet.png" type="Texture" id=4]
+[ext_resource path="res://destroysound.ogg" type="AudioStream" id=5]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 512, 512 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 512, 0, 512, 512 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 1024, 0, 512, 512 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 1536, 0, 512, 512 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": false,
+"name": "default",
+"speed": 10.0
+} ]
 
 [node name="Piece" type="Node2D"]
 script = ExtResource( 1 )
+fall_speed = 0.1
+selected_material = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -3.8147e-06, -3.8147e-06 )
+scale = Vector2( 0.238281, 0.238281 )
 texture = ExtResource( 2 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+visible = false
+scale = Vector2( 0.238, 0.238 )
+frames = SubResource( 5 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )

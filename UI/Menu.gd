@@ -9,4 +9,5 @@ func _on_Play_pressed():
 
 
 func _on_Quit_pressed():
+	$AudioStreamPlayer2D.stop()
 	get_tree().quit()

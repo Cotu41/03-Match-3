@@ -25,8 +25,15 @@ var final_touch
 var controlling = false
 
 export (PackedScene) var background
+export var column_fall_pause : float = 0.3
+export var kill_pause : float = 0.3
+var time : float
+var kPaused := false
+var kill_countdown : float = 0
+
 
 func _ready():
+	Global.GRID = self
 	randomize()
 	all_pieces = make_array()
 	setup_board()
@@ -120,12 +127,16 @@ func touch_difference(touch_1, touch_2):
 			swap_pieces(touch_1.x, touch_1.y, Vector2(0, -1))
 
 func _process(_delta):
-	touch_input()
-	find_matches()
-	refill_columns()
-	
+	if(kill_countdown <= 0):
+		collapse_columns()
+		refill_columns()
+		touch_input()
+		find_matches(_delta)
+		destroy_matched(_delta)
+	kill_countdown -= _delta;
 
-func find_matches():
+
+func find_matches(delta : float):
 	for i in width:
 		for j in height:
 			#Check left and right
@@ -157,7 +168,7 @@ func find_matches():
 				mark_across(i,j, all_pieces[i][j].color)
 				mark_down(i,j, all_pieces[i][j].color)
 				Global.change_score(Global.scores[count_matched])
-	destroy_matched()
+	
 
 func check_across(i,j,value):
 	if i < 0 or i >= width or j < 0 or j >= height: return 0
@@ -193,13 +204,18 @@ func mark_down(i,j,value):
 	all_pieces[i][j].is_counted = true
 	mark_down(i, j + 1, value)
 
-func destroy_matched():
+func destroy_matched(delta : float):
+	var got_match = false
 	for i in width:
 		for j in height:
 			if(all_pieces[i][j].is_matched):
+				got_match = true
 				all_pieces[i][j].die()
 				all_pieces[i][j] = null
-	collapse_columns()
+	if got_match:
+		kill_countdown = kill_pause;
+
+
 
 func collapse_columns():
 	for i in width:
@@ -211,7 +227,8 @@ func collapse_columns():
 						all_pieces[i][k].move_piece(Vector2(0, (k-j) * offset))
 						all_pieces[i][k] = null
 						break
-
+				
+				
 func refill_columns():
 	for i in width:
 		for j in height:
@@ -246,7 +263,7 @@ func touch_input():
 			all_pieces[first_touch.x][first_touch.y].selected = false
 			touch_difference(first_touch, final_touch)
 
-func move_piece(p, position_change):
-	p.position += position_change
+
+
 
 

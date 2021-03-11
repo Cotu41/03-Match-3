@@ -1,8 +1,20 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Grid/grid.gd" type="Script" id=1]
 [ext_resource path="res://Pieces/Piece Background.tscn" type="PackedScene" id=2]
 [ext_resource path="res://UI/HUD.gd" type="Script" id=3]
+[ext_resource path="res://Camera2D.gd" type="Script" id=4]
+[ext_resource path="res://background.png" type="Texture" id=5]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://SpeedPhreak-8MORD.otf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 60
+outline_size = 3
+outline_color = Color( 0.913725, 0.0941176, 0.784314, 1 )
+use_filter = true
+font_data = SubResource( 1 )
 
 [node name="Game" type="Node2D"]
 
@@ -14,6 +26,8 @@ xStart = 96
 yStart = 832
 offset = 128
 background = ExtResource( 2 )
+column_fall_pause = 5.0
+kill_pause = 1.0
 
 [node name="HUD" type="Control" parent="."]
 margin_right = 40.0
@@ -24,6 +38,27 @@ __meta__ = {
 }
 
 [node name="Score" type="Label" parent="HUD"]
-margin_right = 576.0
-margin_bottom = 20.0
-text = "Score: "
+anchor_left = 7.312
+anchor_right = 7.312
+margin_left = -287.48
+margin_top = 63.0
+margin_right = 288.52
+margin_bottom = 214.0
+custom_fonts/font = SubResource( 2 )
+text = "Score:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 292.215, 513.158 )
+current = true
+script = ExtResource( 4 )
+
+[node name="background" type="Sprite" parent="."]
+position = Vector2( 297.439, 521.514 )
+scale = Vector2( 0.3399, 0.3399 )
+z_index = -4
+texture = ExtResource( 5 )
